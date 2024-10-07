@@ -7,25 +7,12 @@ import gspread
 from datetime import timedelta
 from google.oauth2 import service_account
 import numpy as np
+from db import getalldata
 
-@st.cache_data(ttl=3600*10)
+sheet = getalldata()
+
+
 def all_data_for_stats():
-        # Define the scope for Google Sheets API
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
-    # Load credentials from Streamlit secrets
-    service_account_info = st.secrets["gcp_service_account"]
-    creds = service_account.Credentials.from_service_account_info(service_account_info, scopes=scope)
-
-    # Authorize the credentials with gspread
-    client = gspread.authorize(creds)
-
-    # Access the Google Sheet using the spreadsheet ID
-    spreadsheet_id = "19PaTSR26LeiEPzmdCJqS_x3-GjZfaRzKLvsHwQ6mPts"
-    sheet = client.open_by_key(spreadsheet_id)
-
-
-
     worksheet0 = sheet.worksheet("Sheet0")
     worksheet1 = sheet.worksheet("Sheet1")
     worksheet2 = sheet.worksheet("Sheet2")
@@ -46,22 +33,8 @@ def all_data_for_stats():
     all_data = all_data.fillna(0)
     return all_data
 
-@st.cache_data(ttl=3600*10)
+
 def df_for_comp():
-    # Define the scope for Google Sheets API
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
-    # Load credentials from Streamlit secrets
-    service_account_info = st.secrets["gcp_service_account"]
-    creds = service_account.Credentials.from_service_account_info(service_account_info, scopes=scope)
-
-    # Authorize the credentials with gspread
-    client = gspread.authorize(creds)
-
-    # Access the Google Sheet using the spreadsheet ID
-    spreadsheet_id = "19PaTSR26LeiEPzmdCJqS_x3-GjZfaRzKLvsHwQ6mPts"
-    sheet = client.open_by_key(spreadsheet_id)
-
     worksheet4 = sheet.worksheet("comparisons")
 
     data_for_comp = worksheet4.get_all_records()
